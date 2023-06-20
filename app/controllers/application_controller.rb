@@ -19,7 +19,7 @@ class ApplicationController < ActionController::API
 
   def render_result result
     if result[:error]
-      render json: { error: result[:error] }
+      render json: { error: result[:error] }, status: result[:code]
     else
       render json: result
     end

@@ -6,6 +6,10 @@ module Services
       def call
         find_user
         authenticate
+      rescue ServiceException => e
+        { error: e.message, code: e.code }
+      rescue Exception => e
+        { error: e.message, code: 500 }
       end
 
       def find_user
@@ -23,10 +27,7 @@ module Services
             username: @user.name 
           }
         else
-          { 
-            error: 'unauthorized',
-            description: 'cannot signin with this credentials'
-          }
+          raise ServiceException.new("cannot signin with this credentials", 403)
         end
       end
     end
